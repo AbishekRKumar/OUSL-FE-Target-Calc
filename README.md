@@ -88,7 +88,7 @@ The app automates this process and presents it in an intuitive interface.
 **Rathnakumar Abishek**  
 Faculty of Natural Sciences  
 Open University of Sri Lanka  
-📧 [Email me](mailto:your-email@example.com) | [GitHub Profile](https://github.com/abishekrkumar)
+📧 [Email me](abi.kumar6324@gmail.com) | [GitHub Profile](https://github.com/abishekrkumar)
 
 ---
 
