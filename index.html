@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OUSL Exam Target Calc🎯📊</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #6EE7B7, #3B82F6);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .container {
+      background: white;
+      border-radius: 24px;
+      padding: 2.5rem;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 540px;
+      transition: 0.3s ease;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 2rem;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      padding: 14px;
+      margin-top: 1rem;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      font-size: 1rem;
+      transition: border 0.2s;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      border-color: #3b82f6;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 14px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #2563eb;
+    }
+
+    .results {
+      margin-top: 2rem;
+      display: none;
+      background: #f9fafb;
+      padding: 1.5rem;
+      border-radius: 16px;
+    }
+
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .result-item:last-child {
+      border-bottom: none;
+    }
+
+    .result-label {
+      color: #6b7280;
+    }
+
+    .result-value {
+      color: #111827;
+      font-weight: 600;
+    }
+
+    .error {
+      color: #dc2626;
+      text-align: center;
+      margin-top: 1rem;
+      display: none;
+      font-weight: 500;
+    }
+
+    .care-message {
+      text-align: center;
+      margin-top: 2rem;
+      background: #e0f2fe;
+      padding: 1rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      color: #0369a1;
+    }
+
+    .care-message strong {
+      color: #059669;
+    }
+
+    .disclaimer {
+      margin-top: 2rem;
+      background: #fff7ed;
+      padding: 1rem;
+      font-size: 0.85rem;
+      border-radius: 12px;
+      color: #92400e;
+    }
+
+    .feedback-box {
+      text-align: center;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #f3f4f6;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #1f2937;
+    }
+
+    .progress-bar {
+      width: 100%;
+      background: #e5e7eb;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 16px;
+      margin: 0.5rem 0 1rem;
+      position: relative;
+    }
+    .progress-inner {
+      height: 100%;
+      transition: width 0.5s ease;
+    }
+
+    .progress-label {
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      color: #374151;
+    }
+
+    .floating-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #3b82f6;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 9999px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+      transition: background 0.3s ease;
+      z-index: 1000;
+    }
+
+    .floating-btn:hover {
+      background: #2563eb;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>OUSL Exam Target Calc🎯📊</h1>
+    <div class="input-group">
+      <input type="number" id="ocam" placeholder="Enter OCAM marks (≥35)" min="35" max="100" />
+      <select id="target-grade">
+        <option value="85">A+ (85-100)</option>
+        <option value="70">A (70-84)</option>
+        <option value="65">A- (65-69)</option>
+        <option value="60">B+ (60-64)</option>
+        <option value="55">B (55-59)</option>
+        <option value="50">B- (50-54)</option>
+        <option value="45">C+ (45-49)</option>
+        <option value="40">C (40-44)</option>
+        <option value="35">C- (35-39)</option>
+        <option value="30">D+ (30-34)</option>
+        <option value="20">D (20-29)</option>
+        <option value="0">E (0-19)</option>
+      </select>
+    </div>
+    <button onclick="calculate()">Calculate Required Score</button>
+    <div class="error" id="error-msg">OCAM must be ≥35!</div>
+    <div class="results" id="results">
+      <div class="result-item">
+        <span class="result-label">Target Grade:</span>
+        <span class="result-value" id="target-grade-display">-</span>
+      </div>
+      <div class="result-item">
+        <span class="result-label">Final Exam Needed:</span>
+        <span class="result-value" id="required-score">-</span>
+      </div>
+      <div class="result-item">
+        <span class="result-label">OCAM Contribution:</span>
+        <span class="result-value" id="ocam-contribution">-</span>
+      </div>
+      <div class="result-item">
+        <span class="result-label">Eligibility:</span>
+        <span class="result-value" id="eligibility">-</span>
+      </div>
+      <div class="progress-label">OCAM Contribution</div>
+      <div class="progress-bar"><div class="progress-inner" id="ocam-bar"></div></div>
+      <div class="progress-label">Required Final Exam Marks</div>
+      <div class="progress-bar"><div class="progress-inner" id="final-bar"></div></div>
+    </div>
+    <div id="feedback" class="feedback-box"></div>
+
+    <!-- Main Final Output Emphasis -->
+    <div id="final-output-display" style="margin-top: 2rem; text-align: center; display: none;">
+      <div style="font-size: 1.1rem; font-weight: 600; color: #1f2937;">
+        🎯 Required Final Exam Marks:
+      </div>
+      <div id="final-output-value" style="font-size: 2rem; font-weight: 700; color: #3b82f6; margin-top: 0.5rem;"></div>
+    </div>
+
+    <div class="care-message">
+      💙 Made with love for <strong>OUSL Science Students</strong><br />
+      <span>Developed by Abishek R</span>
+    </div>
+    <div class="disclaimer">
+      📢 This tool is for informational purposes only and does not store any user data. Always consult with your faculty for official Grade requirements.
+    </div>
+  </div>
+
+<!-- Floating Button -->
+<a href="https://abishekrkumar.github.io/GPACalculator2.0/" target="_blank" class="floating-btn">
+  GPA Calculator
+</a>
+
+<style>
+  .floating-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #ffffff, #e0f7fa); /* Light gradient */
+    color: #004d40; /* Dark text for contrast */
+    border: none;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    font-family: sans-serif;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    z-index: 1000;
+  }
+
+  .floating-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+</style>
+
+
+  <script>
+    function calculate() {
+      const ocam = parseFloat(document.getElementById('ocam').value);
+      const targetValue = parseFloat(document.getElementById('target-grade').value);
+
+      const errorMsg = document.getElementById('error-msg');
+      const results = document.getElementById('results');
+      const feedbackBox = document.getElementById('feedback');
+      const finalOutput = document.getElementById('final-output-display');
+      const finalOutputValue = document.getElementById('final-output-value');
+
+      errorMsg.style.display = 'none';
+      results.style.display = 'none';
+      feedbackBox.textContent = '';
+      finalOutput.style.display = 'none';
+
+      if (ocam < 35 || isNaN(ocam)) {
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      const ocamContribution = ocam * 0.4;
+      const requiredFinal = Math.max((targetValue - ocamContribution) / 0.6, 0);
+      const finalDisplay = requiredFinal > 100 ? 'Not Possible ❌' : `${Math.ceil(requiredFinal)}/100`;
+
+      document.getElementById('target-grade-display').textContent = document.getElementById('target-grade').selectedOptions[0].text.split(' ')[0];
+      document.getElementById('required-score').textContent = finalDisplay;
+      document.getElementById('ocam-contribution').textContent = `${ocamContribution.toFixed(1)}/40`;
+      document.getElementById('eligibility').textContent = '✅ Eligible';
+      document.getElementById('eligibility').style.color = '#059669';
+
+      const ocamBar = document.getElementById('ocam-bar');
+      const finalBar = document.getElementById('final-bar');
+
+      ocamBar.style.width = `${(ocamContribution / 40) * 100}%`;
+      ocamBar.style.backgroundColor = '#3b82f6';
+
+      finalBar.style.width = `${(Math.min(requiredFinal, 100) / 60) * 100}%`;
+      finalBar.style.backgroundColor = '#f59e0b';
+
+      let feedback;
+      if (requiredFinal > 100) {
+        feedback = "🚫 Sorry, not possible. Try improving OCAM!";
+      } else if (requiredFinal > 70) {
+        feedback = "⚠️ Tough! Aim high and practice hard!";
+      } else if (requiredFinal > 50) {
+        feedback = "💪 Manageable! Steady focus will get you there.";
+      } else {
+        feedback = "✅ Great! You’re almost there!";
+      }
+
+      feedbackBox.textContent = feedback;
+      results.style.display = 'block';
+
+      // Show final required score again at bottom
+      finalOutputValue.textContent = finalDisplay;
+      finalOutput.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
