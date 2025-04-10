@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ES7ET950GC"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ES7ET950GC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  gtag('config', 'G-ES7ET950GC');
-</script>
+    gtag('config', 'G-ES7ET950GC');
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OUSL Exam Target Calc🎯📊</title>
@@ -261,48 +261,46 @@
 
     <div class="care-message">
       💙 Made with love for <strong>OUSL Science Students</strong><br />
-      <span>Developed by Abishek R</span>
+      <span>Developed by Abishek R (BSc Undergraduate) </span>
     </div>
     <div class="disclaimer">
       📢 This tool is for informational purposes only and does not store any user data. Always consult with your faculty for official Grade requirements.
     </div>
   </div>
 
-<!-- Floating Button -->
-<a href="https://abishekrkumar.github.io/GPACalculator2.0/" target="_blank" class="floating-btn">
-  GPA Calculator
-</a>
+  <!-- Floating Button -->
+  <a href="https://abishekrkumar.github.io/GPACalculator2.0/" target="_blank" class="floating-btn">
+    GPA Calculator
+  </a>
 
-<style>
-  .floating-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 12px 20px;
-    background: linear-gradient(135deg, #ffffff, #e0f7fa); /* Light gradient */
-    color: #004d40; /* Dark text for contrast */
-    border: none;
-    border-radius: 30px;
-    text-decoration: none;
-    font-weight: bold;
-    font-family: sans-serif;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    z-index: 1000;
-  }
+  <style>
+    .floating-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #ffffff, #e0f7fa); /* Light gradient */
+      color: #004d40; /* Dark text for contrast */
+      border: none;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      font-family: sans-serif;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      z-index: 1000;
+    }
 
-  .floating-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-  }
-</style>
-
+    .floating-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+  </style>
 
   <script>
-    function calculate() {
+        function calculate() {
       const ocam = parseFloat(document.getElementById('ocam').value);
       const targetValue = parseFloat(document.getElementById('target-grade').value);
-
       const errorMsg = document.getElementById('error-msg');
       const results = document.getElementById('results');
       const feedbackBox = document.getElementById('feedback');
@@ -320,7 +318,19 @@
       }
 
       const ocamContribution = ocam * 0.4;
-      const requiredFinal = Math.max((targetValue - ocamContribution) / 0.6, 0);
+      let requiredFinal;
+
+      // Calculate required final exam marks based on new rules
+      if (targetValue <= 30) {
+        requiredFinal = targetValue;
+      } else if (targetValue <= 40) {
+        const Y_calc = (targetValue - ocamContribution) / 0.6;
+        requiredFinal = Math.max(30, Y_calc);
+      } else {
+        const Y_calc = (targetValue - ocamContribution) / 0.6;
+        requiredFinal = Math.max(40, Y_calc);
+      }
+
       const finalDisplay = requiredFinal > 100 ? 'Not Possible ❌' : `${Math.ceil(requiredFinal)}/100`;
 
       document.getElementById('target-grade-display').textContent = document.getElementById('target-grade').selectedOptions[0].text.split(' ')[0];
@@ -331,10 +341,8 @@
 
       const ocamBar = document.getElementById('ocam-bar');
       const finalBar = document.getElementById('final-bar');
-
       ocamBar.style.width = `${(ocamContribution / 40) * 100}%`;
       ocamBar.style.backgroundColor = '#3b82f6';
-
       finalBar.style.width = `${(Math.min(requiredFinal, 100) / 60) * 100}%`;
       finalBar.style.backgroundColor = '#f59e0b';
 
@@ -348,7 +356,6 @@
       } else {
         feedback = "✅ Great! You’re almost there!";
       }
-
       feedbackBox.textContent = feedback;
       results.style.display = 'block';
 
