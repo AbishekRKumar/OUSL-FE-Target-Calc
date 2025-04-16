@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-ES7ET950GC"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -15,6 +14,7 @@
   <title>OUSL Exam Target Calc🎯📊</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
+    /* Original User CSS - Unchanged */
     * {
       margin: 0;
       padding: 0;
@@ -50,15 +50,27 @@
     }
 
     .input-group input,
-    .input-group select {
+    .input-group select { /* Apply same style to select */
       width: 100%;
       padding: 14px;
-      margin-top: 1rem;
+      margin-top: 1rem; /* Consistent margin */
       border-radius: 12px;
       border: 1px solid #cbd5e1;
       font-size: 1rem;
       transition: border 0.2s;
+      appearance: none; /* Basic reset for select */
+      background-color: white; /* Ensure white background */
     }
+
+    /* Add specific styling for select dropdown arrow if needed */
+     .input-group select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+        padding-right: 2.5rem; /* Make space for arrow */
+     }
+
 
     .input-group input:focus,
     .input-group select:focus {
@@ -91,6 +103,15 @@
       padding: 1.5rem;
       border-radius: 16px;
     }
+
+     /* Added title for results section */
+     .results h2 {
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #374151; /* gray-700 */
+        margin-bottom: 1.5rem;
+     }
 
     .result-item {
       display: flex;
@@ -135,23 +156,25 @@
     }
 
     .disclaimer {
-      margin-top: 2rem;
+      margin-top: 2rem; /* Adjusted margin */
       background: #fff7ed;
       padding: 1rem;
       font-size: 0.85rem;
       border-radius: 12px;
       color: #92400e;
+       text-align: center; /* Center disclaimer text */
     }
 
     .feedback-box {
       text-align: center;
-      margin-top: 1rem;
+      margin-top: 1.5rem; /* Adjusted margin */
       padding: 1rem;
       background: #f3f4f6;
       border-radius: 12px;
       font-size: 1rem;
       font-weight: 500;
       color: #1f2937;
+      display: none; /* Hide initially */
     }
 
     .progress-bar {
@@ -166,114 +189,43 @@
     .progress-inner {
       height: 100%;
       transition: width 0.5s ease;
+      border-radius: 8px; /* Match parent */
     }
 
     .progress-label {
       font-size: 0.9rem;
       margin-top: 1rem;
       color: #374151;
+      margin-bottom: 0.25rem; /* Add space below label */
     }
 
-    .floating-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #3b82f6;
-      color: white;
-      padding: 12px 18px;
-      border-radius: 9999px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95rem;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-      transition: background 0.3s ease;
-      z-index: 1000;
+    /* Style for the highlighted final output section */
+    #final-output-display {
+        margin-top: 1.5rem;
+        padding: 1.25rem; /* More padding */
+        background-color: #e0f2fe; /* Light blue background */
+        border-radius: 16px; /* Rounded corners */
+        text-align: center;
+        display: none; /* Hide initially */
+        border: 1px solid #bae6fd; /* Light blue border */
     }
 
-    .floating-btn:hover {
-      background: #2563eb;
+    #final-output-display .label { /* Style for the label inside */
+        font-size: 1rem;
+        font-weight: 600;
+        color: #0369a1; /* Darker blue text */
+        margin-bottom: 0.5rem;
     }
 
-    @media (max-width: 480px) {
-      .container {
-        padding: 1.5rem;
-      }
+     #final-output-value { /* Style for the value inside */
+        font-size: 2.25rem; /* Larger font size */
+        font-weight: 700; /* Bold */
+        color: #2563eb; /* Brighter blue */
+        line-height: 1.1; /* Adjust line height */
+     }
 
-      h1 {
-        font-size: 1.6rem;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>OUSL Exam Target Calc🎯📊</h1>
-    <div class="input-group">
-      <input type="number" id="ocam" placeholder="Enter OCAM marks (≥35)" min="35" max="100" />
-      <select id="target-grade">
-        <option value="85">A+ (85-100)</option>
-        <option value="70">A (70-84)</option>
-        <option value="65">A- (65-69)</option>
-        <option value="60">B+ (60-64)</option>
-        <option value="55">B (55-59)</option>
-        <option value="50">B- (50-54)</option>
-        <option value="45">C+ (45-49)</option>
-        <option value="40">C (40-44)</option>
-        <option value="35">C- (35-39)</option>
-        <option value="30">D+ (30-34)</option>
-        <option value="20">D (20-29)</option>
-        <option value="0">E (0-19)</option>
-      </select>
-    </div>
-    <button onclick="calculate()">Calculate Required Score</button>
-    <div class="error" id="error-msg">OCAM must be ≥35!</div>
-    <div class="results" id="results">
-      <div class="result-item">
-        <span class="result-label">Target Grade:</span>
-        <span class="result-value" id="target-grade-display">-</span>
-      </div>
-      <div class="result-item">
-        <span class="result-label">Final Exam Needed:</span>
-        <span class="result-value" id="required-score">-</span>
-      </div>
-      <div class="result-item">
-        <span class="result-label">OCAM Contribution:</span>
-        <span class="result-value" id="ocam-contribution">-</span>
-      </div>
-      <div class="result-item">
-        <span class="result-label">Eligibility:</span>
-        <span class="result-value" id="eligibility">-</span>
-      </div>
-      <div class="progress-label">OCAM Contribution</div>
-      <div class="progress-bar"><div class="progress-inner" id="ocam-bar"></div></div>
-      <div class="progress-label">Required Final Exam Marks</div>
-      <div class="progress-bar"><div class="progress-inner" id="final-bar"></div></div>
-    </div>
-    <div id="feedback" class="feedback-box"></div>
 
-    <!-- Main Final Output Emphasis -->
-    <div id="final-output-display" style="margin-top: 2rem; text-align: center; display: none;">
-      <div style="font-size: 1.1rem; font-weight: 600; color: #1f2937;">
-        🎯 Required Final Exam Marks:
-      </div>
-      <div id="final-output-value" style="font-size: 2rem; font-weight: 700; color: #3b82f6; margin-top: 0.5rem;"></div>
-    </div>
-
-    <div class="care-message">
-      💙 Made with love for <strong>OUSL Science Students</strong><br />
-      <span>Developed by Abishek R (BSc Undergraduate) </span>
-    </div>
-    <div class="disclaimer">
-      📢 This tool is for informational purposes only and does not store any user data. Always consult with your faculty for official Grade requirements.
-    </div>
-  </div>
-
-  <!-- Floating Button -->
-  <a href="https://abishekrkumar.github.io/GPACalculator2.0/" target="_blank" class="floating-btn">
-    GPA Calculator
-  </a>
-
-  <style>
+    /* Original Floating Button Style */
     .floating-btn {
       position: fixed;
       bottom: 20px;
@@ -295,74 +247,272 @@
       transform: translateY(-3px);
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
     }
+
+    /* Original Responsive Style */
+    @media (max-width: 480px) {
+      .container {
+        padding: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+      }
+       #final-output-value {
+          font-size: 1.8rem; /* Slightly smaller on mobile */
+       }
+    }
   </style>
+</head>
+<body>
+  <div class="container">
+    <h1>OUSL Exam Target Calc🎯📊</h1>
+    <div class="input-group">
+      <input type="number" id="ocam" placeholder="Enter OCAM marks (≥35)" min="35" max="100" />
+
+      <select id="course-type">
+        <option value="standard" selected>Standard Course (Nat Sci / HSS)</option>
+        <option value="lee3410">LEE3410: English or FNU3200</option>
+      </select>
+
+      <select id="target-grade">
+        <option value="85">A+ (85-100)</option>
+        <option value="70">A (70-84)</option>
+        <option value="65">A- (65-69)</option>
+        <option value="60">B+ (60-64)</option>
+        <option value="55">B (55-59)</option>
+        <option value="50">B- (50-54)</option>
+        <option value="45">C+ (45-49)</option>
+        <option value="40">C (40-44)</option>
+        <option value="35">C- (35-39)</option>
+        <option value="30">D+ (30-34)</option>
+        <option value="20">D (20-29)</option>
+        <option value="0">E (0-19)</option>
+      </select>
+    </div>
+    <button onclick="calculate()">Calculate Required Score</button>
+    <div class="error" id="error-msg">OCAM must be ≥35!</div>
+
+    <div class="results" id="results">
+       <h2>Calculation Results</h2>
+       <div class="result-item">
+         <span class="result-label">Eligibility Status:</span>
+         <span class="result-value" id="eligibility">-</span>
+       </div>
+       <div class="result-item">
+         <span class="result-label">Target Grade:</span>
+         <span class="result-value" id="target-grade-display">-</span>
+       </div>
+       <div class="result-item">
+         <span class="result-label">Min. Overall Mark (Z) Needed:</span>
+         <span class="result-value" id="target-z-display">-</span>
+       </div>
+       <div class="result-item">
+         <span class="result-label">OCAM Contribution:</span>
+         <span class="result-value" id="ocam-contribution">-</span>
+       </div>
+       <div class="result-item">
+         <span class="result-label">Min. Final Exam (Y) Needed:</span>
+         <span class="result-value" id="required-score">-</span>
+       </div>
+
+       <div style="margin-top: 1.5rem;">
+           <div class="progress-label">OCAM Contribution to Final Grade (%)</div>
+           <div class="progress-bar"><div class="progress-inner" id="ocam-bar"></div></div>
+           <div class="progress-label">Required Final Exam Contribution (%)</div>
+           <div class="progress-bar"><div class="progress-inner" id="final-bar"></div></div>
+       </div>
+    </div>
+
+    <div id="final-output-display">
+      <div class="label">🎯 Minimum Final Exam Marks Needed:</div>
+      <div id="final-output-value">-</div>
+    </div>
+
+    <div id="feedback" class="feedback-box"></div>
+
+    <div class="care-message">
+      💙 Made with love for <strong>OUSL Science Students</strong><br />
+      <span>Developed by Abishek R (BSc Undergraduate) </span>
+    </div>
+    <div class="disclaimer">
+      📢 This tool is for informational purposes based on the provided guidelines and does not store any user data. Always consult official OUSL documentation and your faculty for definitive grade requirements and policies. Calculations assume standard rules apply unless 'LEE3410' is selected.
+    </div>
+  </div>
+
+  <a href="https://abishekrkumar.github.io/GPACalculator2.0/" target="_blank" class="floating-btn">
+    Overall GPA Calc
+  </a>
 
   <script>
-        function calculate() {
-      const ocam = parseFloat(document.getElementById('ocam').value);
-      const targetValue = parseFloat(document.getElementById('target-grade').value);
+    function calculate() {
+      // --- Get Inputs ---
+      const ocamInput = document.getElementById('ocam');
+      const targetGradeSelect = document.getElementById('target-grade');
+      const courseTypeSelect = document.getElementById('course-type');
+
+      const ocam = parseFloat(ocamInput.value); // OCAM Score (X)
+      const targetValue = parseFloat(targetGradeSelect.value); // Minimum Z% for the target grade
+      const courseType = courseTypeSelect.value; // 'standard' or 'lee3410'
+
+      // --- Get Display Elements ---
       const errorMsg = document.getElementById('error-msg');
-      const results = document.getElementById('results');
+      const resultsDiv = document.getElementById('results');
       const feedbackBox = document.getElementById('feedback');
-      const finalOutput = document.getElementById('final-output-display');
-      const finalOutputValue = document.getElementById('final-output-value');
-
-      errorMsg.style.display = 'none';
-      results.style.display = 'none';
-      feedbackBox.textContent = '';
-      finalOutput.style.display = 'none';
-
-      if (ocam < 35 || isNaN(ocam)) {
-        errorMsg.style.display = 'block';
-        return;
-      }
-
-      const ocamContribution = ocam * 0.4;
-      let requiredFinal;
-
-      // Calculate required final exam marks based on new rules
-      if (targetValue <= 30) {
-        requiredFinal = targetValue;
-      } else if (targetValue <= 40) {
-        const Y_calc = (targetValue - ocamContribution) / 0.6;
-        requiredFinal = Math.max(30, Y_calc);
-      } else {
-        const Y_calc = (targetValue - ocamContribution) / 0.6;
-        requiredFinal = Math.max(40, Y_calc);
-      }
-
-      const finalDisplay = requiredFinal > 100 ? 'Not Possible ❌' : `${Math.ceil(requiredFinal)}/100`;
-
-      document.getElementById('target-grade-display').textContent = document.getElementById('target-grade').selectedOptions[0].text.split(' ')[0];
-      document.getElementById('required-score').textContent = finalDisplay;
-      document.getElementById('ocam-contribution').textContent = `${ocamContribution.toFixed(1)}/40`;
-      document.getElementById('eligibility').textContent = '✅ Eligible';
-      document.getElementById('eligibility').style.color = '#059669';
-
+      const eligibilitySpan = document.getElementById('eligibility');
+      const targetGradeSpan = document.getElementById('target-grade-display');
+      const targetZSpan = document.getElementById('target-z-display');
+      const ocamContributionSpan = document.getElementById('ocam-contribution');
+      const requiredScoreSpan = document.getElementById('required-score'); // In results table
       const ocamBar = document.getElementById('ocam-bar');
       const finalBar = document.getElementById('final-bar');
-      ocamBar.style.width = `${(ocamContribution / 40) * 100}%`;
-      ocamBar.style.backgroundColor = '#3b82f6';
-      finalBar.style.width = `${(Math.min(requiredFinal, 100) / 60) * 100}%`;
-      finalBar.style.backgroundColor = '#f59e0b';
+      const finalOutputValue = document.getElementById('final-output-value'); // Highlighted output value
+      const finalOutputDisplay = document.getElementById('final-output-display'); // Highlighted output container
 
-      let feedback;
-      if (requiredFinal > 100) {
-        feedback = "🚫 Sorry, not possible. Try improving OCAM!";
-      } else if (requiredFinal > 70) {
-        feedback = "⚠️ Tough! Aim high and practice hard!";
-      } else if (requiredFinal > 50) {
-        feedback = "💪 Manageable! Steady focus will get you there.";
-      } else {
-        feedback = "✅ Great! You’re almost there!";
+      // --- Reset Display ---
+      errorMsg.style.display = 'none';
+      resultsDiv.style.display = 'none'; // Hide results table initially
+      feedbackBox.style.display = 'none';
+      feedbackBox.textContent = '';
+      finalOutputDisplay.style.display = 'none'; // Hide highlighted output initially
+
+      // --- Input Validation ---
+      if (isNaN(ocam) || ocam < 0 || ocam > 100) {
+         errorMsg.textContent = 'Please enter a valid OCAM score (0-100).';
+         errorMsg.style.display = 'block';
+         ocamInput.focus();
+         return;
       }
-      feedbackBox.textContent = feedback;
-      results.style.display = 'block';
 
-      // Show final required score again at bottom
-      finalOutputValue.textContent = finalDisplay;
-      finalOutput.style.display = 'block';
+      // --- Eligibility Check ---
+      const isEligible = ocam >= 35;
+      // Display eligibility status within the results table (even if ineligible)
+      eligibilitySpan.textContent = isEligible ? '✅ Eligible for Final Exam' : '❌ Not Eligible (OCAM < 35)';
+      eligibilitySpan.style.color = isEligible ? '#059669' : '#DC2626';
+
+      // If not eligible, show only eligibility part of the results table and stop
+      if (!isEligible) {
+         resultsDiv.style.display = 'block'; // Show results table to display eligibility
+         // Hide other result items within the table
+         targetGradeSpan.parentElement.style.display = 'none';
+         targetZSpan.parentElement.style.display = 'none';
+         ocamContributionSpan.parentElement.style.display = 'none';
+         requiredScoreSpan.parentElement.style.display = 'none'; // Hide table row score
+         ocamBar.parentElement.parentElement.style.display = 'none'; // Hide progress bars
+         errorMsg.style.display = 'none';
+         finalOutputDisplay.style.display = 'none'; // Ensure highlighted output is hidden
+         feedbackBox.style.display = 'none'; // Ensure feedback is hidden
+         return;
+      } else {
+         // Ensure all result items are visible within the table if eligible
+         targetGradeSpan.parentElement.style.display = 'flex';
+         targetZSpan.parentElement.style.display = 'flex';
+         ocamContributionSpan.parentElement.style.display = 'flex';
+         requiredScoreSpan.parentElement.style.display = 'flex'; // Show table row score
+         ocamBar.parentElement.parentElement.style.display = 'block'; // Show progress bars
+         errorMsg.style.display = 'none';
+         // Highlighted output and feedback will be shown later if calculation is successful
+      }
+
+
+      // --- Define Calculation Parameters based on Course Type ---
+      let ocamWeight, finalWeight, yThreshold1, yThreshold2, zCap;
+      if (courseType === 'lee3410') {
+        ocamWeight = 0.3; finalWeight = 0.7; yThreshold1 = 35; yThreshold2 = 40; zCap = 40;
+      } else {
+        ocamWeight = 0.4; finalWeight = 0.6; yThreshold1 = 30; yThreshold2 = 40; zCap = 40;
+      }
+
+      // --- Calculate Required Final Exam Score (Y) ---
+      let requiredFinal = -1; // Initialize
+      if (targetValue < yThreshold1) {
+        requiredFinal = targetValue;
+      } else {
+        let yIdeal = (targetValue - ocamWeight * ocam) / finalWeight;
+        if (yIdeal < yThreshold1) {
+          let zAtYThreshold1 = (yThreshold1 < yThreshold2) ? Math.min(zCap, ocamWeight * ocam + finalWeight * yThreshold1) : (ocamWeight * ocam + finalWeight * yThreshold1);
+          requiredFinal = (zAtYThreshold1 >= targetValue) ? yThreshold1 : Math.max(yThreshold2, yIdeal);
+        } else if (yIdeal < yThreshold2) {
+           let zActual = Math.min(zCap, ocamWeight * ocam + finalWeight * yIdeal);
+           requiredFinal = (zActual >= targetValue) ? yIdeal : Math.max(yThreshold2, yIdeal);
+        } else {
+          requiredFinal = yIdeal;
+        }
+      }
+
+      // Round up
+      if (requiredFinal >= 0) {
+          requiredFinal = Math.ceil(requiredFinal);
+      }
+
+      // --- Determine Final Display and Feedback ---
+      let finalDisplay; // For display (string)
+      let feedback;
+      let isPossible = true;
+
+      if (requiredFinal < 0) {
+          finalDisplay = "Error";
+          feedback = "Calculation error occurred.";
+          isPossible = false;
+      } else if (requiredFinal > 100) {
+          finalDisplay = "Not Possible ❌";
+          // Display the impossible score in the highlighted area for context
+          finalOutputValue.textContent = `> 100 (${requiredFinal})`;
+          feedback = `🚫 Sorry, achieving this grade requires a final exam score over 100. Try aiming for a different grade.`;
+          isPossible = false;
+      } else {
+           // Enforce minimum Y if needed based on target Z rule
+           if (targetValue >= yThreshold1 && requiredFinal < yThreshold1) {
+               requiredFinal = yThreshold1;
+           }
+          finalDisplay = `${requiredFinal}/100`;
+          // Provide feedback based on difficulty
+          if (requiredFinal > 85) feedback = "🔥 Very Challenging! Requires an exceptional performance.";
+          else if (requiredFinal > 70) feedback = "⚠️ Tough target! Aim high and prepare thoroughly!";
+          else if (requiredFinal > 55) feedback = "💪 Achievable! Consistent effort will get you there.";
+          else if (requiredFinal >= yThreshold1) feedback = `👍 Solid chance! Focus on getting ${requiredFinal} or more.`;
+          else feedback = `✅ Great! You only need ${requiredFinal} on the final. Keep it up!`;
+      }
+
+      // --- Update Display Elements ---
+      targetGradeSpan.textContent = targetGradeSelect.selectedOptions[0].text.split(' ')[0];
+      targetZSpan.textContent = `${targetValue}%`;
+      ocamContributionSpan.textContent = `${(ocamWeight * ocam).toFixed(1)} / ${(ocamWeight * 100).toFixed(0)}%`;
+      requiredScoreSpan.textContent = finalDisplay; // Update score in results table (less emphasis)
+
+      // Update highlighted output section
+      if (isPossible) {
+          finalOutputValue.textContent = finalDisplay; // Set the main highlighted value
+      } else if (requiredFinal > 100) {
+          // Already set above for impossible case
+      } else {
+           finalOutputValue.textContent = finalDisplay; // Show "Error" if calculation failed
+      }
+
+
+      // Update progress bars
+      if (isPossible) {
+          ocamBar.style.width = `${ocamWeight * ocam}%`;
+          ocamBar.style.backgroundColor = '#3b82f6';
+          let finalContributionNeeded = finalWeight * Math.min(requiredFinal, 100);
+          finalBar.style.width = `${finalContributionNeeded}%`;
+          finalBar.style.backgroundColor = '#f59e0b';
+      } else {
+          ocamBar.style.width = '0%';
+          finalBar.style.width = '0%';
+      }
+
+      // Show relevant sections
+      resultsDiv.style.display = 'block'; // Show results table
+      finalOutputDisplay.style.display = 'block'; // Show highlighted output
+      feedbackBox.textContent = feedback;
+      feedbackBox.style.display = 'block'; // Show feedback
     }
+
+    // --- Event Listeners ---
+    document.getElementById('course-type').addEventListener('change', calculate);
+    document.getElementById('target-grade').addEventListener('change', calculate);
+    document.getElementById('ocam').addEventListener('input', calculate);
+
   </script>
 </body>
 </html>
