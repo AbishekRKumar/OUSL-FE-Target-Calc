@@ -271,8 +271,8 @@
 
       <select id="course-type">
         <option value="standard" selected>Standard Course (Nat Sci / HSS)</option>
-        <option value="lee3410">LEE3410: English or FNU3200</option>
-      </select>
+        <option value="lee3410">LEE3410: English</option>
+        <option value="fnu3200">FNU3200</option> </select>
 
       <select id="target-grade">
         <option value="85">A+ (85-100)</option>
@@ -335,7 +335,7 @@
       <span>Developed by Abishek R (BSc Undergraduate) </span>
     </div>
     <div class="disclaimer">
-      📢 This tool is for informational purposes based on the provided guidelines and does not store any user data. Always consult official OUSL documentation and your faculty for definitive grade requirements and policies. Calculations assume standard rules apply unless 'LEE3410' is selected.
+      📢 This tool is for informational purposes based on the provided guidelines and does not store any user data. Always consult official OUSL documentation and your faculty for definitive grade requirements and policies. Calculations assume standard rules apply unless 'LEE3410' or 'FNU3200' is selected. Note: Rules for FNU3200 assumed based on standard thresholds.
     </div>
   </div>
 
@@ -352,7 +352,7 @@
 
       const ocam = parseFloat(ocamInput.value); // OCAM Score (X)
       const targetValue = parseFloat(targetGradeSelect.value); // Minimum Z% for the target grade
-      const courseType = courseTypeSelect.value; // 'standard' or 'lee3410'
+      const courseType = courseTypeSelect.value; // 'standard', 'lee3410', or 'fnu3200'
 
       // --- Get Display Elements ---
       const errorMsg = document.getElementById('error-msg');
@@ -385,56 +385,71 @@
 
       // --- Eligibility Check ---
       const isEligible = ocam >= 35;
-      // Display eligibility status within the results table (even if ineligible)
       eligibilitySpan.textContent = isEligible ? '✅ Eligible for Final Exam' : '❌ Not Eligible (OCAM < 35)';
       eligibilitySpan.style.color = isEligible ? '#059669' : '#DC2626';
 
       // If not eligible, show only eligibility part of the results table and stop
       if (!isEligible) {
-         resultsDiv.style.display = 'block'; // Show results table to display eligibility
-         // Hide other result items within the table
+         resultsDiv.style.display = 'block';
          targetGradeSpan.parentElement.style.display = 'none';
          targetZSpan.parentElement.style.display = 'none';
          ocamContributionSpan.parentElement.style.display = 'none';
-         requiredScoreSpan.parentElement.style.display = 'none'; // Hide table row score
-         ocamBar.parentElement.parentElement.style.display = 'none'; // Hide progress bars
+         requiredScoreSpan.parentElement.style.display = 'none';
+         ocamBar.parentElement.parentElement.style.display = 'none';
          errorMsg.style.display = 'none';
-         finalOutputDisplay.style.display = 'none'; // Ensure highlighted output is hidden
-         feedbackBox.style.display = 'none'; // Ensure feedback is hidden
+         finalOutputDisplay.style.display = 'none';
+         feedbackBox.style.display = 'none';
          return;
       } else {
          // Ensure all result items are visible within the table if eligible
          targetGradeSpan.parentElement.style.display = 'flex';
          targetZSpan.parentElement.style.display = 'flex';
          ocamContributionSpan.parentElement.style.display = 'flex';
-         requiredScoreSpan.parentElement.style.display = 'flex'; // Show table row score
-         ocamBar.parentElement.parentElement.style.display = 'block'; // Show progress bars
+         requiredScoreSpan.parentElement.style.display = 'flex';
+         ocamBar.parentElement.parentElement.style.display = 'block';
          errorMsg.style.display = 'none';
-         // Highlighted output and feedback will be shown later if calculation is successful
       }
 
 
       // --- Define Calculation Parameters based on Course Type ---
       let ocamWeight, finalWeight, yThreshold1, yThreshold2, zCap;
       if (courseType === 'lee3410') {
+        // LEE3410: 30/70 weights, 35/40 thresholds
         ocamWeight = 0.3; finalWeight = 0.7; yThreshold1 = 35; yThreshold2 = 40; zCap = 40;
-      } else {
+      } else if (courseType === 'fnu3200') {
+        // FNU3200: 50/50 weights, assume standard 30/40 thresholds and cap
+        ocamWeight = 0.5; finalWeight = 0.5; yThreshold1 = 30; yThreshold2 = 40; zCap = 40;
+      }
+      else {
+        // Standard: 40/60 weights, 30/40 thresholds (Default)
         ocamWeight = 0.4; finalWeight = 0.6; yThreshold1 = 30; yThreshold2 = 40; zCap = 40;
       }
 
       // --- Calculate Required Final Exam Score (Y) ---
       let requiredFinal = -1; // Initialize
       if (targetValue < yThreshold1) {
+        // Case 1: Target Z requires Y < yThreshold1 (Z = Y)
         requiredFinal = targetValue;
       } else {
+        // Case 2: Target Z requires Y >= yThreshold1
+        // Calculate the 'ideal' Y needed if the main formula applied
         let yIdeal = (targetValue - ocamWeight * ocam) / finalWeight;
+
+        // Subcase 2a: Ideal Y is below the first threshold (yThreshold1)
         if (yIdeal < yThreshold1) {
+          // Need at least Y = yThreshold1. Check if sufficient.
           let zAtYThreshold1 = (yThreshold1 < yThreshold2) ? Math.min(zCap, ocamWeight * ocam + finalWeight * yThreshold1) : (ocamWeight * ocam + finalWeight * yThreshold1);
           requiredFinal = (zAtYThreshold1 >= targetValue) ? yThreshold1 : Math.max(yThreshold2, yIdeal);
-        } else if (yIdeal < yThreshold2) {
+        }
+        // Subcase 2b: Ideal Y is between the thresholds (yThreshold1 <= yIdeal < yThreshold2)
+        else if (yIdeal < yThreshold2) {
+           // Ideal Y is in the capped range. Check if cap prevents target.
            let zActual = Math.min(zCap, ocamWeight * ocam + finalWeight * yIdeal);
            requiredFinal = (zActual >= targetValue) ? yIdeal : Math.max(yThreshold2, yIdeal);
-        } else {
+        }
+        // Subcase 2c: Ideal Y is above the second threshold (yIdeal >= yThreshold2)
+        else {
+          // Main formula applies directly.
           requiredFinal = yIdeal;
         }
       }
@@ -455,8 +470,7 @@
           isPossible = false;
       } else if (requiredFinal > 100) {
           finalDisplay = "Not Possible ❌";
-          // Display the impossible score in the highlighted area for context
-          finalOutputValue.textContent = `> 100 (${requiredFinal})`;
+          finalOutputValue.textContent = `> 100 (${requiredFinal})`; // Show detail in highlighted area
           feedback = `🚫 Sorry, achieving this grade requires a final exam score over 100. Try aiming for a different grade.`;
           isPossible = false;
       } else {
@@ -477,17 +491,16 @@
       targetGradeSpan.textContent = targetGradeSelect.selectedOptions[0].text.split(' ')[0];
       targetZSpan.textContent = `${targetValue}%`;
       ocamContributionSpan.textContent = `${(ocamWeight * ocam).toFixed(1)} / ${(ocamWeight * 100).toFixed(0)}%`;
-      requiredScoreSpan.textContent = finalDisplay; // Update score in results table (less emphasis)
+      requiredScoreSpan.textContent = finalDisplay; // Update score in results table
 
       // Update highlighted output section
       if (isPossible) {
-          finalOutputValue.textContent = finalDisplay; // Set the main highlighted value
+          finalOutputValue.textContent = finalDisplay;
       } else if (requiredFinal > 100) {
-          // Already set above for impossible case
+          // Already set above
       } else {
-           finalOutputValue.textContent = finalDisplay; // Show "Error" if calculation failed
+           finalOutputValue.textContent = finalDisplay; // Show "Error"
       }
-
 
       // Update progress bars
       if (isPossible) {
@@ -502,16 +515,15 @@
       }
 
       // Show relevant sections
-      resultsDiv.style.display = 'block'; // Show results table
-      finalOutputDisplay.style.display = 'block'; // Show highlighted output
+      resultsDiv.style.display = 'block';
+      finalOutputDisplay.style.display = 'block';
       feedbackBox.textContent = feedback;
-      feedbackBox.style.display = 'block'; // Show feedback
+      feedbackBox.style.display = 'block';
     }
 
     // --- Event Listeners ---
-    document.getElementById('course-type').addEventListener('change', calculate);
-    document.getElementById('target-grade').addEventListener('change', calculate);
-    document.getElementById('ocam').addEventListener('input', calculate);
+    // Calculation is now only triggered by the button's onclick event
+    // Removed input/change listeners that triggered automatic calculation
 
   </script>
 </body>
